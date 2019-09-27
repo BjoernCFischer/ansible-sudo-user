@@ -1,0 +1,9 @@
+---
+# Username of the unprivileged user to allow sudo execution to
+unprivileged_user: mysudouser
+
+# Public key to store for the sudo user
+unprivileged_user_publickey: "{{ lookup('file', 'keys/my_public_key.pub') }}"
+
+# Encrypted sudo user's password to set. See docs for details: https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-generate-encrypted-passwords-for-the-user-module
+unprivileged_user_password: my_secret_crypted_password

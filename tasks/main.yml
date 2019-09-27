@@ -1,0 +1,27 @@
+---
+- name: Install sudo
+  package:
+    name: sudo
+
+- name: Create user {{ unprivileged_user }}
+  user:
+    name: "{{ unprivileged_user }}"
+    shell: /bin/bash
+    group: users
+    groups: sudo
+    append: true # --> user is not removed from any other group
+    password: "{{ unprivileged_user_password }}"
+
+- name: Set authorized key for user {{ unprivileged_user }}
+  authorized_key:
+    user: "{{ unprivileged_user }}"
+    state: present
+    key: "{{ unprivileged_user_publickey }}"
+
+- name: Activate NOPASSWD for all users in the group sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%sudo'
+    line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
